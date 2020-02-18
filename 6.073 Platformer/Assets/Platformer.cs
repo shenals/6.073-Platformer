@@ -8,9 +8,25 @@ public class Platformer : MonoBehaviour
     [SerializeField]
     public bool isWASD;
     // Start is called before the first frame update
+    private int hp_value;
+    private int invuln_cooldown;
+
+    public int hp
+    {
+        get { return hp_value; }
+        set
+        {
+            if (invuln_cooldown <= 0)
+            {
+                hp_value = value;
+                invuln_cooldown = 20; // lol stupid hacks}
+            }
+        }
+    }
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();   
+        rb = GetComponent<Rigidbody2D>();
+        hp = 5;
     }
 
     // Update is called once per frame
@@ -48,6 +64,14 @@ public class Platformer : MonoBehaviour
             {
                 rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y + 20);
             }
+        }
+    }
+
+    void FixedUpdate()
+    {
+        if (--invuln_cooldown < 0)
+        {
+            invuln_cooldown = 0;
         }
     }
 }
