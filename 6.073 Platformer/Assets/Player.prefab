@@ -144,7 +144,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 7288150624636778937}
-  isWASD: 1
+  isWASD: 0
   maxBulletCooldown: 1
   bulletPrefab: {fileID: 8423563948372164483, guid: 05e2cc9b59a69454489c139a036d5205,
     type: 3}
