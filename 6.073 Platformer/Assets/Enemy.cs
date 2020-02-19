@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    private const float speed=2;
+    private const float speed=1;
     [SerializeField] public Platformer target;  // Target player to attack.
 
     private Rigidbody2D rb;

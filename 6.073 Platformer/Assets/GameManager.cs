@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour
         timer2.text = "Time: " + Mathf.Round(Time.timeSinceLevelLoad).ToString();
         hp1value = player1.hp;
         hp2value = player2.hp;
-        hp1.text = "HP: " + player1.hp.ToString();
-        hp2.text = "HP: " + player2.hp.ToString();
+        hp1.text = "HP: " + player2.hp.ToString();
+        hp2.text = "HP: " + player1.hp.ToString();
     }
 }

@@ -107,7 +107,7 @@ public class Platformer : MonoBehaviour
         {
             SpawnEnemy();
             enemiesSpawned += 1;
-            enemySpawnCooldown = 10 / (1 + 0.1 * enemiesSpawned);
+            enemySpawnCooldown = 30 / (1 + 0.1 * enemiesSpawned);
         }
         else
         {
