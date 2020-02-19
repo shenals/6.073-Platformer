@@ -44,7 +44,7 @@ public class Platformer : MonoBehaviour
                 rightitude += 1;
             }
             rb.velocity = new Vector2(5 * rightitude, rb.velocity.y);
-            if (Input.GetKeyDown("up"))
+            if (Input.GetKeyDown("up") && rb.velocity.y == 0)
             {
                 rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y + 20);
             }
@@ -60,7 +60,7 @@ public class Platformer : MonoBehaviour
                 rightitude += 1;
             }
             rb.velocity = new Vector2(5 * rightitude, rb.velocity.y);
-            if (Input.GetKeyDown(KeyCode.W))
+            if (Input.GetKeyDown(KeyCode.W) && rb.velocity.y == 0)
             {
                 rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y + 20);
             }
