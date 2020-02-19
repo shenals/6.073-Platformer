@@ -26,6 +26,6 @@ public class Enemy : MonoBehaviour
     {
         if (other.gameObject != target.gameObject) return;
         target.hp = target.hp - 1;
-        Debug.Log(target.hp);
+       // Debug.Log(target.hp);
     }
 }

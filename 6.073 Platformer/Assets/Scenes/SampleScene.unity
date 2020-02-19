@@ -1382,11 +1382,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7288150624636778917, guid: aff367dadc8274264b7fe03c3652411d,
-        type: 3}
-      propertyPath: isWASD
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 7288150624636778936, guid: aff367dadc8274264b7fe03c3652411d,
         type: 3}
       propertyPath: m_Name
@@ -2432,11 +2427,6 @@ PrefabInstance:
     - target: {fileID: 7288150624636778916, guid: aff367dadc8274264b7fe03c3652411d,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7288150624636778917, guid: aff367dadc8274264b7fe03c3652411d,
-        type: 3}
-      propertyPath: isWASD
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7288150624636778936, guid: aff367dadc8274264b7fe03c3652411d,
