@@ -10,14 +10,11 @@ public class Platformer : MonoBehaviour
     // Start is called before the first frame update
     private int hp_value;
     private int invuln_cooldown;
+    public float walk_speed;
+    public float jump_speed;
 
     public GameObject bulletPrefab;
     public GameObject enemyPrefab;
-
-    private System.Random rng;
-
-    private double enemySpawnCooldown = 0.0;
-    private int enemiesSpawned = 0;
 
     public int hp
     {
@@ -35,7 +32,6 @@ public class Platformer : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         hp = 5;
-        rng = new System.Random();
     }
 
     // Update is called once per frame
@@ -44,24 +40,13 @@ public class Platformer : MonoBehaviour
         int rightitude = 0;
         if (getLeft())  rightitude -= 1;
         if (getRight()) rightitude += 1;
-        rb.velocity = new Vector2(5 * rightitude, rb.velocity.y);
-        if (getUpDown() && rb.velocity.y == 0)
+        rb.velocity = new Vector2(walk_speed * rightitude, rb.velocity.y);
+        if (getUpDown() && rb.velocity.y == 0) // TODO: fix this horrible hack
         {
-            rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y + 20);
+            rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y + jump_speed);
         }
         //shoot
         if(getShootDown()) ShootBullet();
-
-        if (enemySpawnCooldown <= 0)
-        {
-            SpawnEnemy();
-            enemiesSpawned += 1;
-            enemySpawnCooldown = 30 / (1 + 0.1 * enemiesSpawned);
-        }
-        else
-        {
-            enemySpawnCooldown -= Time.deltaTime;
-        }
     }
 
     private bool getLeft()
@@ -126,14 +111,5 @@ public class Platformer : MonoBehaviour
         {
             invuln_cooldown = 0;
         }
-    }
-
-    void SpawnEnemy()
-    {
-        Vector2 dir = new Vector2(2 * (float) rng.NextDouble() - 1, (float) rng.NextDouble());
-        dir = dir / dir.magnitude;
-        Enemy enemy = Instantiate(enemyPrefab, this.transform.position + (Vector3) dir * 15, new Quaternion(0, 0, 0, 1))
-            .GetComponent<Enemy>();
-        enemy.target = this;
     }
 }

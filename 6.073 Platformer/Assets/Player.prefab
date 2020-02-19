@@ -145,7 +145,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 7288150624636778937}
   isWASD: 0
-  maxBulletCooldown: 1
+  walk_speed: 5
+  jump_speed: 20
   bulletPrefab: {fileID: 8423563948372164483, guid: 05e2cc9b59a69454489c139a036d5205,
     type: 3}
   enemyPrefab: {fileID: 4247514736856067169, guid: 6a888c449b8a0124e9d6d61987a3137c,
