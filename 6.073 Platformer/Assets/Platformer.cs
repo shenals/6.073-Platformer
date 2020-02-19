@@ -11,6 +11,19 @@ public class Platformer : MonoBehaviour
     private int hp_value;
     private int invuln_cooldown;
 
+    public float maxBulletCooldown = 0.0f;//2f;
+    private float bulletCooldown;
+
+    public GameObject bulletPrefab;
+    public GameObject enemyPrefab;
+
+    private System.Random rng;
+
+    private double enemySpawnCooldown = 0.0;
+    private int enemiesSpawned = 0;
+
+    public GameManager manager;
+
     public int hp
     {
         get { return hp_value; }
@@ -27,6 +40,8 @@ public class Platformer : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         hp = 5;
+        bulletCooldown = maxBulletCooldown;
+        rng = new System.Random();
     }
 
     // Update is called once per frame
@@ -34,36 +49,136 @@ public class Platformer : MonoBehaviour
     {
         int rightitude = 0;
         if(!isWASD){
-            if (Input.GetKey("left"))
-            {
-                // rb.velocity = new Vector2(-5, 0);
-                rightitude -= 1;
-            }    
-            if (Input.GetKey("right"))
-            {
-                rightitude += 1;
+            //movement
+            if(!Input.GetKey(KeyCode.Slash) || true){
+                if (Input.GetKey("left"))
+                {
+                    // rb.velocity = new Vector2(-5, 0);
+                    rightitude -= 1;
+                }    
+                if (Input.GetKey("right"))
+                {
+                    rightitude += 1;
+                }
+                rb.velocity = new Vector2(5 * rightitude, rb.velocity.y);
+                if (Input.GetKeyDown("up") && rb.velocity.y == 0)
+                {
+                    rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y + 20);
+                }
             }
-            rb.velocity = new Vector2(5 * rightitude, rb.velocity.y);
-            if (Input.GetKeyDown("up") && rb.velocity.y == 0)
-            {
-                rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y + 20);
+            //shoot
+            if(Input.GetKeyDown(KeyCode.Slash)){// && bulletCooldown <= 0){
+                ShootBulletArrow();
             }
         }
         else{
-            if (Input.GetKey(KeyCode.A))
-            {
-                // rb.velocity = new Vector2(-5, 0);
-                rightitude -= 1;
-            }    
-            if (Input.GetKey(KeyCode.D))
-            {
-                rightitude += 1;
+            //movement
+            if(!Input.GetKey(KeyCode.Space) || true){
+                if (Input.GetKey(KeyCode.A))
+                {
+                    // rb.velocity = new Vector2(-5, 0);
+                    rightitude -= 1;
+                }    
+                if (Input.GetKey(KeyCode.D))
+                {
+                    rightitude += 1;
+                }
+                rb.velocity = new Vector2(5 * rightitude, rb.velocity.y);
+                if (Input.GetKeyDown(KeyCode.W) && rb.velocity.y == 0)
+                {
+                    rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y + 20);
+                }
             }
-            rb.velocity = new Vector2(5 * rightitude, rb.velocity.y);
-            if (Input.GetKeyDown(KeyCode.W) && rb.velocity.y == 0)
-            {
-                rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y + 20);
+
+            //shoot
+            if(Input.GetKeyDown(KeyCode.Space)){ // && bulletCooldown <= 0){
+                ShootBulletWASD();
             }
+        }
+
+        if (bulletCooldown  > 0){
+            bulletCooldown -= Time.deltaTime;
+        }
+        else{
+            bulletCooldown = maxBulletCooldown;
+        }
+
+        if (enemySpawnCooldown <= 0)
+        {
+            SpawnEnemy();
+            enemiesSpawned += 1;
+            enemySpawnCooldown = 10 / (1 + 0.1 * enemiesSpawned);
+        }
+        else
+        {
+            enemySpawnCooldown -= Time.deltaTime;
+        }
+
+    }
+
+    void ShootBulletArrow(){
+        Vector2 dir = new Vector2(0, 0); //default
+        /*if(Input.GetKey("up") && Input.GetKey("right")){
+            dir = Vector2.forward + Vector.
+        }
+        else if(Input.GetKey("up") && Input.GetKey("left")){
+            dir = Direction.UP_LEFT;
+        }
+        else if(Input.GetKey("down") && Input.GetKey("right")){
+            dir = Direction.DOWN_RIGHT;
+        }
+        else if(Input.GetKey("down") && Input.GetKey("left")){
+            dir = Direction.DOWN_LEFT;
+        }*/
+        if(Input.GetKey("right")){
+            dir += new Vector2(1,0);
+        }
+        if(Input.GetKey("left")){
+            dir += new Vector2(-1,0);
+        }
+        if(Input.GetKey("up")){
+            dir += new Vector2(0,1);
+        }
+        if(Input.GetKey("down")){
+            dir += new Vector2(0,-1);
+        }
+        if(!(dir.x == 0 && dir.y == 0)){
+            Bullet bullet = Instantiate(bulletPrefab, this.transform.position, Quaternion.AngleAxis (180, dir)).GetComponent<Bullet>();
+            bullet.SetDir(dir);
+            bullet.manager = manager;
+        }
+    }
+
+    void ShootBulletWASD(){
+        Vector2 dir = new Vector2(0, 0); //default
+        /*if(Input.GetKey("up") && Input.GetKey("right")){
+            dir = Vector2.forward + Vector.
+        }
+        else if(Input.GetKey("up") && Input.GetKey("left")){
+            dir = Direction.UP_LEFT;
+        }
+        else if(Input.GetKey("down") && Input.GetKey("right")){
+            dir = Direction.DOWN_RIGHT;
+        }
+        else if(Input.GetKey("down") && Input.GetKey("left")){
+            dir = Direction.DOWN_LEFT;
+        }*/
+        if(Input.GetKey(KeyCode.D)){
+            dir += new Vector2(1,0);
+        }
+        if(Input.GetKey(KeyCode.A)){
+            dir += new Vector2(-1,0);
+        }
+        if(Input.GetKey(KeyCode.W)){
+            dir += new Vector2(0,1);
+        }
+        if(Input.GetKey(KeyCode.S)){
+            dir += new Vector2(0,-1);
+        }
+        if(!(dir.x == 0 && dir.y == 0)){
+            Bullet bullet = Instantiate(bulletPrefab, this.transform.position, Quaternion.AngleAxis (180, dir)).GetComponent<Bullet>();
+            bullet.SetDir(dir);
+            bullet.manager = manager;
         }
     }
 
@@ -73,5 +188,14 @@ public class Platformer : MonoBehaviour
         {
             invuln_cooldown = 0;
         }
+    }
+
+    void SpawnEnemy()
+    {
+        Vector2 dir = new Vector2(2 * (float) rng.NextDouble() - 1, (float) rng.NextDouble());
+        dir = dir / dir.magnitude;
+        Enemy enemy = Instantiate(enemyPrefab, this.transform.position + (Vector3) dir * 15, new Quaternion(0, 0, 0, 1))
+            .GetComponent<Enemy>();
+        enemy.target = this;
     }
 }
