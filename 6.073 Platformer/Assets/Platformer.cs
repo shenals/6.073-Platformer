@@ -11,9 +11,6 @@ public class Platformer : MonoBehaviour
     private int hp_value;
     private int invuln_cooldown;
 
-    public float maxBulletCooldown = 0.0f;//2f;
-    private float bulletCooldown;
-
     public GameObject bulletPrefab;
     public GameObject enemyPrefab;
 
@@ -21,8 +18,6 @@ public class Platformer : MonoBehaviour
 
     private double enemySpawnCooldown = 0.0;
     private int enemiesSpawned = 0;
-
-    public GameManager manager;
 
     public int hp
     {
@@ -40,7 +35,6 @@ public class Platformer : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         hp = 5;
-        bulletCooldown = maxBulletCooldown;
         rng = new System.Random();
     }
 
@@ -48,60 +42,15 @@ public class Platformer : MonoBehaviour
     void Update()
     {
         int rightitude = 0;
-        if(!isWASD){
-            //movement
-            if(!Input.GetKey(KeyCode.Slash) || true){
-                if (Input.GetKey("left"))
-                {
-                    // rb.velocity = new Vector2(-5, 0);
-                    rightitude -= 1;
-                }    
-                if (Input.GetKey("right"))
-                {
-                    rightitude += 1;
-                }
-                rb.velocity = new Vector2(5 * rightitude, rb.velocity.y);
-                if (Input.GetKeyDown("up") && rb.velocity.y == 0)
-                {
-                    rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y + 20);
-                }
-            }
-            //shoot
-            if(Input.GetKeyDown(KeyCode.Slash)){// && bulletCooldown <= 0){
-                ShootBulletArrow();
-            }
+        if (getLeft())  rightitude -= 1;
+        if (getRight()) rightitude += 1;
+        rb.velocity = new Vector2(5 * rightitude, rb.velocity.y);
+        if (getUpDown() && rb.velocity.y == 0)
+        {
+            rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y + 20);
         }
-        else{
-            //movement
-            if(!Input.GetKey(KeyCode.Space) || true){
-                if (Input.GetKey(KeyCode.A))
-                {
-                    // rb.velocity = new Vector2(-5, 0);
-                    rightitude -= 1;
-                }    
-                if (Input.GetKey(KeyCode.D))
-                {
-                    rightitude += 1;
-                }
-                rb.velocity = new Vector2(5 * rightitude, rb.velocity.y);
-                if (Input.GetKeyDown(KeyCode.W) && rb.velocity.y == 0)
-                {
-                    rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y + 20);
-                }
-            }
-
-            //shoot
-            if(Input.GetKeyDown(KeyCode.Space)){ // && bulletCooldown <= 0){
-                ShootBulletWASD();
-            }
-        }
-
-        if (bulletCooldown  > 0){
-            bulletCooldown -= Time.deltaTime;
-        }
-        else{
-            bulletCooldown = maxBulletCooldown;
-        }
+        //shoot
+        if(getShootDown()) ShootBullet();
 
         if (enemySpawnCooldown <= 0)
         {
@@ -113,72 +62,61 @@ public class Platformer : MonoBehaviour
         {
             enemySpawnCooldown -= Time.deltaTime;
         }
-
     }
 
-    void ShootBulletArrow(){
-        Vector2 dir = new Vector2(0, 0); //default
-        /*if(Input.GetKey("up") && Input.GetKey("right")){
-            dir = Vector2.forward + Vector.
-        }
-        else if(Input.GetKey("up") && Input.GetKey("left")){
-            dir = Direction.UP_LEFT;
-        }
-        else if(Input.GetKey("down") && Input.GetKey("right")){
-            dir = Direction.DOWN_RIGHT;
-        }
-        else if(Input.GetKey("down") && Input.GetKey("left")){
-            dir = Direction.DOWN_LEFT;
-        }*/
-        if(Input.GetKey("right")){
-            dir += new Vector2(1,0);
-        }
-        if(Input.GetKey("left")){
-            dir += new Vector2(-1,0);
-        }
-        if(Input.GetKey("up")){
-            dir += new Vector2(0,1);
-        }
-        if(Input.GetKey("down")){
-            dir += new Vector2(0,-1);
-        }
-        if(!(dir.x == 0 && dir.y == 0)){
-            Bullet bullet = Instantiate(bulletPrefab, this.transform.position, Quaternion.AngleAxis (180, dir)).GetComponent<Bullet>();
-            bullet.SetDir(dir);
-            bullet.manager = manager;
-        }
+    private bool getLeft()
+    {
+        return isWASD ? Input.GetKey(KeyCode.A) : Input.GetKey(KeyCode.LeftArrow);
     }
 
-    void ShootBulletWASD(){
-        Vector2 dir = new Vector2(0, 0); //default
-        /*if(Input.GetKey("up") && Input.GetKey("right")){
-            dir = Vector2.forward + Vector.
+    private bool getRight()
+    {
+        return isWASD ? Input.GetKey(KeyCode.D) : Input.GetKey(KeyCode.RightArrow);
+    }
+
+    private bool getUp()
+    {
+        return isWASD ? Input.GetKey(KeyCode.W) : Input.GetKey(KeyCode.UpArrow);
+    }
+
+    private bool getDown()
+    {
+        return isWASD ? Input.GetKey(KeyCode.S) : Input.GetKey(KeyCode.DownArrow);
+    }
+
+    private bool getUpDown() // note that this means when the up key is pressed down
+    {
+        return isWASD ? Input.GetKeyDown(KeyCode.W) : Input.GetKeyDown(KeyCode.UpArrow);
+    }
+
+    private bool getShootDown()
+    {
+        return isWASD ? Input.GetKeyDown(KeyCode.Space) : Input.GetKeyDown(KeyCode.Slash);
+    }
+
+    void ShootBullet()
+    {
+        Vector2 dir = new Vector2(0, 0);
+        if (getRight())
+        {
+            dir += new Vector2(1, 0);
         }
-        else if(Input.GetKey("up") && Input.GetKey("left")){
-            dir = Direction.UP_LEFT;
+        if (getLeft())
+        {
+            dir += new Vector2(-1, 0);
         }
-        else if(Input.GetKey("down") && Input.GetKey("right")){
-            dir = Direction.DOWN_RIGHT;
+        if (getUp())
+        {
+            dir += new Vector2(0, 1);
         }
-        else if(Input.GetKey("down") && Input.GetKey("left")){
-            dir = Direction.DOWN_LEFT;
-        }*/
-        if(Input.GetKey(KeyCode.D)){
-            dir += new Vector2(1,0);
+        if (getDown())
+        {
+            dir += new Vector2(0, -1);
         }
-        if(Input.GetKey(KeyCode.A)){
-            dir += new Vector2(-1,0);
-        }
-        if(Input.GetKey(KeyCode.W)){
-            dir += new Vector2(0,1);
-        }
-        if(Input.GetKey(KeyCode.S)){
-            dir += new Vector2(0,-1);
-        }
-        if(!(dir.x == 0 && dir.y == 0)){
-            Bullet bullet = Instantiate(bulletPrefab, this.transform.position, Quaternion.AngleAxis (180, dir)).GetComponent<Bullet>();
+        if (!(dir.x == 0 && dir.y == 0))
+        {
+            Bullet bullet = Instantiate(bulletPrefab, this.transform.position, Quaternion.AngleAxis(180, dir)).GetComponent<Bullet>();
             bullet.SetDir(dir);
-            bullet.manager = manager;
         }
     }
 
