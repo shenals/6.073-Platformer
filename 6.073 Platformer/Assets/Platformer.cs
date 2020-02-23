@@ -9,6 +9,9 @@ public class Platformer : MonoBehaviour
     public bool isWASD;
     // Start is called before the first frame update
     private int hp_value;
+    
+    public const int MAX_HP = 5;
+
     private int invuln_cooldown;
     public float walk_speed;
     public float jump_speed;
@@ -31,7 +34,7 @@ public class Platformer : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        hp = 5;
+        hp = MAX_HP;
     }
 
     // Update is called once per frame
