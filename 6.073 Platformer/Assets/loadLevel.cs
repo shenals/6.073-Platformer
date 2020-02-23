@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class loadLevel : MonoBehaviour
 {
+    public string levelToLoad;
 	//Button play;
     // Start is called before the first frame update
     void Start()
@@ -20,6 +21,6 @@ public class loadLevel : MonoBehaviour
     }
 
     public void LevelLoad(){
-    	SceneManager.LoadScene("SampleScene");
+    	SceneManager.LoadScene(levelToLoad);
     }
 }

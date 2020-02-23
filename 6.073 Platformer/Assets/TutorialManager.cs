@@ -22,6 +22,8 @@ public class TutorialManager : MonoBehaviour
     private bool player1Done;
     private bool player2Done;
 
+    private bool TutorialDone = false;
+
     public GameObject blackOut;
     // Start is called before the first frame update
     void Start()
@@ -79,10 +81,14 @@ public class TutorialManager : MonoBehaviour
         	if(Input.GetKeyDown(KeyCode.B)){
         		Transition();
         		GameManager.instance.ResetUI();
-
+                TutorialDone = true;
         		Debug.Log("reset?");
         	}
         }
+    }
+
+    public bool isTutorialDone(){
+        return TutorialDone;
     }
 
     IEnumerator WaitForBlinking(){

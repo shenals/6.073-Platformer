@@ -5,6 +5,9 @@ using UnityEngine;
 public class Platformer : MonoBehaviour
 {	
 	public Rigidbody2D rb;
+    public SpriteRenderer spriteRen;
+    public Sprite jumpSprite;
+    public Sprite standSprite;
     [SerializeField]
     public bool isWASD;
     // Start is called before the first frame update
@@ -44,10 +47,14 @@ public class Platformer : MonoBehaviour
         if (getLeft())  rightitude -= 1;
         if (getRight()) rightitude += 1;
         rb.velocity = new Vector2(walk_speed * rightitude, rb.velocity.y);
+        if (rightitude == 1) spriteRen.flipX = false;
+        if (rightitude == -1) spriteRen.flipX = true;
         if (getUpDown() && rb.velocity.y == 0) // TODO: fix this horrible hack
-        {
+        {   
+            spriteRen.sprite = jumpSprite;
             rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y + jump_speed);
         }
+        else if (rb.velocity.y == 0) spriteRen.sprite = standSprite;
         //shoot
         if(getShootDown()) ShootBullet();
     }
