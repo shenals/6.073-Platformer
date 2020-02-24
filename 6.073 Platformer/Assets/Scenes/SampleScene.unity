@@ -17769,8 +17769,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Enemies are arriving! Press the forward slash key and one of the arrow
-    keys at the same time to shoot in a direction.
+  m_Text: 'Enemies are arriving! Hold one of the arrow keys and press the forward
+    slash key to shoot in a direction.
+
 
 '
 --- !u!222 &883051330
@@ -18513,8 +18514,8 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Enemies are arriving! Press the space bar and one of the WASD keys at
-    the same time to shoot in a direction.
+  m_Text: 'Enemies are arriving! Hold one of the WASD keys and press the space bar
+    to shoot in a direction.
 
 '
 --- !u!222 &1182782975

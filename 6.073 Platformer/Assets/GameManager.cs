@@ -18,8 +18,8 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1.0f;
         instance = this;
         scorevalue = 0;
-        hp1value = 0;
-        hp2value = 0;
+        //hp1value = 0;
+        //hp2value = 0;
         time = 0;
     }
 
@@ -41,13 +41,13 @@ public class GameManager : MonoBehaviour
         timer1.text = "Time: " + Mathf.Round(time).ToString();
         timer2.text = "Time: " + Mathf.Round(time).ToString();
         
-        hp1value = player1.hp;
-        hp2value = player2.hp;
+        //hp1value = player1.hp;
+        //hp2value = player2.hp;
         hp1.text = "HP: " + player2.hp.ToString();
         hp2.text = "HP: " + player1.hp.ToString();
 
         //Game Over
-        if(tutorial.isTutorialDone() && (hp1value <= 0 || hp2value <= 0)){
+        if(tutorial.isTutorialDone() && (player1.hp <= 0 || player2.hp <= 0)){//(hp1value <= 0 || hp2value <= 0)){
             Time.timeScale = 0;
             GameOverPanel.SetActive(true);
         }
@@ -55,7 +55,7 @@ public class GameManager : MonoBehaviour
 
     public void incrementScore()
     {
-        if ((hp1value > 0 && hp2value > 0))
+        if ((player1.hp > 0 && player2.hp > 0))
         {
             scorevalue++;
         }
